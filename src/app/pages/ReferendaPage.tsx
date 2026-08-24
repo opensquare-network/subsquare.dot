@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { Card, Pagination, Tabs } from "../components/gov";
-import {
-  readFilter,
-  ReferendaSection,
-} from "../components/sections/ReferendaSection";
+import { readFilter } from "../components/sections/referenda/filters";
+import { ReferendaSection } from "../components/sections/referenda/ReferendaSection";
 import { StatsGrid } from "../components/sections/StatsGrid";
 import { useReferenda } from "../hooks/useReferenda";
 
