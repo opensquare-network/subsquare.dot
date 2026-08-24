@@ -1,0 +1,8 @@
+@import "./fonts.css";
+@import "./tailwind.css";
+@import "./theme.css";
+
+/* Identicon background circle follows the site's muted token (light/dark). */
+.user-identicon svg circle:first-child {
+  fill: var(--muted);
+}
