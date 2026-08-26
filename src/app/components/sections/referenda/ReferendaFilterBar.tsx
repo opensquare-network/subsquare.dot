@@ -18,7 +18,7 @@ export function ReferendaFilterBar({
         <button
           key={f}
           onClick={() => onChange(f)}
-          className="px-3 py-1 rounded-full text-[11px] font-mono transition-colors"
+          className="px-3 py-1 rounded-full text-[11px] font-mono transition-colors cursor-pointer"
           style={
             activeFilter === f
               ? {

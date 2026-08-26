@@ -29,7 +29,7 @@ export function Tabs<T extends string>({
         <button
           key={tab.value}
           onClick={() => onChange(tab.value)}
-          className="px-4 py-2 text-xs font-medium capitalize transition-colors border-b-2 -mb-px"
+          className="px-4 py-2 text-xs font-medium capitalize transition-colors border-b-2 -mb-px cursor-pointer"
           style={
             active === tab.value
               ? { borderColor: color, color }
