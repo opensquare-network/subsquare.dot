@@ -1,6 +1,6 @@
 import { filterTabs } from "../../../data";
-import { DOT_PINK } from "../../../theme";
 import { formatNumber } from "../../../lib/format";
+import { cn } from "../../ui/utils";
 
 /** Status filter chips (synced to the URL) plus the total referenda count. */
 export function ReferendaFilterBar({
@@ -18,20 +18,12 @@ export function ReferendaFilterBar({
         <button
           key={f}
           onClick={() => onChange(f)}
-          className="px-3 py-1 rounded-full text-[11px] font-mono transition-colors cursor-pointer"
-          style={
+          className={cn(
+            "px-3 py-1 rounded-full text-[11px] font-mono transition-colors cursor-pointer",
             activeFilter === f
-              ? {
-                  background: `${DOT_PINK}18`,
-                  border: `1px solid ${DOT_PINK}50`,
-                  color: DOT_PINK,
-                }
-              : {
-                  background: "var(--muted)",
-                  border: "1px solid var(--border)",
-                  color: "var(--muted-foreground)",
-                }
-          }
+              ? "bg-[#E6007A18] border border-[#E6007A50] text-[#E6007A]"
+              : "bg-muted border border-border text-muted-foreground hover:text-foreground hover:border-foreground/40",
+          )}
         >
           {f}
         </button>
