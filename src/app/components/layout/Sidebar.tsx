@@ -4,6 +4,7 @@ import { ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import { DOT_PINK } from "../../theme";
 import { navSections } from "../../data";
 import { useTheme } from "../../hooks/useTheme";
+import { useOverviewSummary } from "./OverviewSummaryContext";
 
 /** Maps a sidebar nav item to its route. */
 const itemRoutes: Record<string, string> = {
@@ -39,10 +40,12 @@ function NavSection({
   section,
   expanded,
   onToggle,
+  itemCounts = {},
 }: {
   section: NavSectionData;
   expanded: boolean;
   onToggle: () => void;
+  itemCounts?: Record<string, number>;
 }) {
   return (
     <div>
@@ -59,18 +62,26 @@ function NavSection({
       </button>
       {expanded && (
         <div className="ml-4 border-l border-border pl-3 space-y-0.5 mt-0.5">
-          {section.items.map((item) => (
-            <NavLink
-              key={item}
-              to={itemRoutes[item] ?? "/"}
-              className="w-full text-left px-2 py-1 rounded text-xs transition-colors text-muted-foreground hover:text-foreground"
-              style={({ isActive }) =>
-                isActive ? { color: DOT_PINK } : undefined
-              }
-            >
-              {item}
-            </NavLink>
-          ))}
+          {section.items.map((item) => {
+            const count = itemCounts[item];
+            return (
+              <NavLink
+                key={item}
+                to={itemRoutes[item] ?? "/"}
+                className="w-full flex items-center justify-between gap-2 px-2 py-1 rounded text-xs transition-colors text-muted-foreground hover:text-foreground"
+                style={({ isActive }) =>
+                  isActive ? { color: DOT_PINK } : undefined
+                }
+              >
+                <span>{item}</span>
+                {!!count && (
+                  <span className="font-mono text-[10px] leading-none text-muted-foreground/70">
+                    {count}
+                  </span>
+                )}
+              </NavLink>
+            );
+          })}
         </div>
       )}
     </div>
@@ -101,6 +112,7 @@ function ThemeToggle({
 /** Left navigation sidebar: brand, nav sections and footer toggles. */
 export function Sidebar() {
   const { dark, toggle: toggleDark } = useTheme();
+  const { activeReferenda } = useOverviewSummary();
   const [expandedSections, setExpandedSections] = useState<string[]>([
     "Governance",
   ]);
@@ -124,6 +136,7 @@ export function Sidebar() {
             section={section}
             expanded={expandedSections.includes(section.label)}
             onToggle={() => toggleSection(section.label)}
+            itemCounts={{ Referenda: activeReferenda }}
           />
         ))}
       </nav>

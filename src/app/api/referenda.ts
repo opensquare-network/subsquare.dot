@@ -89,6 +89,55 @@ export async function fetchReferendums({
   return (await res.json()) as ReferendumsResponse;
 }
 
+export interface OverviewSummary {
+  discussions?: { active?: number; all?: number };
+  gov2Referenda?: { active?: number; all?: number };
+  treasuryProposals?: { active?: number; all?: number };
+  treasurySpends?: { active?: number; all?: number };
+  bounties?: { active?: number; all?: number };
+  childBounties?: { active?: number; all?: number };
+  multiAssetBounties?: { active?: number; all?: number };
+  multiAssetChildBounties?: { active?: number; all?: number };
+  gov2ReferendaTracks?: { id: number; name: string; activeCount: number }[];
+}
+
+/**
+ * Chain overview summary (`/overview/summary`) — the same endpoint that
+ * powers the SubSquare sidebar active counts (e.g. Referenda active).
+ * Source: https://polkadot-api.subsquare.io/overview/summary
+ */
+export async function fetchOverviewSummary(): Promise<OverviewSummary> {
+  const res = await fetch(`${API_BASE}/overview/summary`);
+  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
+  return (await res.json()) as OverviewSummary;
+}
+
+export interface TreasuryYearSummary {
+  year: number;
+  proposalsCount: number;
+  totalFiatValue: number;
+  totalFiatValueAtFinal: number;
+}
+
+/**
+ * Per-year treasury spend summary (`/treasury/years`), the same data that
+ * powers the Year Status chart on SubSquare.
+ * Source: https://polkadot-api.subsquare.io/treasury/years
+ */
+export async function fetchTreasuryYears(): Promise<TreasuryYearSummary[]> {
+  const res = await fetch(`${API_BASE}/treasury/years`);
+  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
+  return (await res.json()) as TreasuryYearSummary[];
+}
+
+/**
+ * All-time treasury spend in USD (fiat, at final price) — the sum of every
+ * year's `totalFiatValueAtFinal`, i.e. exactly the Year Status "Total".
+ */
+export function totalTreasurySpent(years: TreasuryYearSummary[]): number {
+  return years.reduce((acc, year) => acc + year.totalFiatValueAtFinal, 0);
+}
+
 /** List item status (prefers onchainData.state, falls back to top-level state). */
 export function stateOf(item: ReferendumListItem): ReferendumState {
   return item.onchainData?.state ?? item.state;
