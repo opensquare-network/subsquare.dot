@@ -1,8 +1,8 @@
 import { ChevronRight, Clock, MessageSquare } from "lucide-react";
 import { type ReferendaRow } from "../../../api/referenda";
+import { DOT_PINK } from "../../../theme";
 import { StatusBadge, TrackBadge, VoteBar } from "../../gov";
 import AddressUser from "../../user/AddressUser";
-import { DOT_PINK } from "../../../theme";
 import { REFERENDA_GRID_COLUMNS } from "./columns";
 
 const DETAIL_BASE = "https://polkadot.subsquare.io/referenda";

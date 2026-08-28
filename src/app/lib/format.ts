@@ -1,3 +1,5 @@
+const COMPACT_SUFFIXES = ["", "K", "M", "B", "T", "Q"];
+
 /** Normalize API amounts (decimal string / 0x hex string / number) to bigint. */
 export function toBigInt(
   value: string | number | bigint | undefined | null,
@@ -15,18 +17,16 @@ export function startCase(str: string): string {
   return str.replace(/[_-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-const SUFFIXES = ["", "K", "M", "B", "T", "Q"];
-
 /** Compact number: 16717047719202036599 → "16.7Q". */
 export function compact(value: number, digits = 1): string {
   if (value === 0) return "0";
   const neg = value < 0 ? "-" : "";
   const abs = Math.abs(value);
   let tier = Math.floor(Math.log10(abs) / 3);
-  tier = Math.min(tier, SUFFIXES.length - 1);
+  tier = Math.min(tier, COMPACT_SUFFIXES.length - 1);
   const scaled = abs / 10 ** (tier * 3);
   const fixed = scaled >= 100 ? scaled.toFixed(0) : scaled.toFixed(digits);
-  return `${neg}${fixed.replace(/\.0+$/, "")}${SUFFIXES[tier]!}`;
+  return `${neg}${fixed.replace(/\.0+$/, "")}${COMPACT_SUFFIXES[tier]!}`;
 }
 
 /** Relative time: new Date(iso) → "3d ago" / "5h ago". */

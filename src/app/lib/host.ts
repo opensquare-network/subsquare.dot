@@ -14,13 +14,10 @@
  */
 import { getHostProvider, isInsideContainer } from "@parity/product-sdk/host";
 import { createClient, type PolkadotClient } from "polkadot-api";
-
-// Polkadot mainnet Asset Hub — default network
-const POLKADOT_ASSETHUB_GENESIS =
-  "0xc1ef26b567de07159e4ecd415fbbb0340c56a09c4d72c82516d0f3bc2b782c80";
+import { POLKADOT_ASSET_HUB } from "./chain/networks";
 
 export const HOST_GENESIS: string =
-  import.meta.env.NETWORK_GENESIS_HASH ?? POLKADOT_ASSETHUB_GENESIS;
+  import.meta.env.NETWORK_GENESIS_HASH ?? POLKADOT_ASSET_HUB.genesisHash;
 
 type HostWindow = Window & { __HOST_API_PORT__?: MessagePort };
 

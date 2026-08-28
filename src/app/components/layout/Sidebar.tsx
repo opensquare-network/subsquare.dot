@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import { ChevronDown, Globe, Moon, Sun } from "lucide-react";
-import { DOT_PINK } from "../../theme";
 import { navSections } from "../../data";
 import { useTheme } from "../../hooks/useTheme";
+import { DOT_PINK } from "../../theme";
 import { useOverviewSummary } from "./OverviewSummaryContext";
 
 /** Maps a sidebar nav item to its route. */

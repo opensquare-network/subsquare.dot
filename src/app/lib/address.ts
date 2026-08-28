@@ -3,11 +3,9 @@
  * - base58 / SS58 decoding (known-account matchers)
  * - address validation and ellipsis
  */
-
 const BASE58_ALPHABET =
   "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
-const SS58_BODY = 32 + 2; // public key (32) + checksum (2)
+const SS58_BODY_LENGTH = 32 + 2;
 
 function ascii(str: string): number[] {
   return Array.from(str).map((c) => c.charCodeAt(0));
@@ -37,7 +35,7 @@ export function decodeSs58(address: string): Uint8Array | null {
   if (!address) return null;
   const bytes = base58ToBytes(address);
   // SS58 format: network prefix (1-byte for Polkadot) + public key + checksum
-  if (bytes.length !== 1 + SS58_BODY) return null;
+  if (bytes.length !== 1 + SS58_BODY_LENGTH) return null;
   return new Uint8Array(bytes.slice(1, 1 + 32));
 }
 

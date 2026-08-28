@@ -3,7 +3,6 @@
  * batch POST to the statescan short-ids endpoint with caching,
  * so N addresses on a page resolve in a single request.
  */
-
 export interface IdentityInfo {
   address: string;
   info?: {
@@ -29,9 +28,6 @@ export interface IdentityInfo {
   };
 }
 
-export const IDENTITY_SERVER_HOST = "https://id.statescan.io";
-const CHAIN = "polkadot";
-
 type PendingRequest = {
   address: string;
   resolve: (identity: IdentityInfo | null) => void;
@@ -49,7 +45,7 @@ function flush() {
   pending = [];
   const addresses = batch.map((req) => req.address);
 
-  fetch(`${IDENTITY_SERVER_HOST}/${CHAIN}/short-ids`, {
+  fetch("https://id.statescan.io/polkadot/short-ids", {
     headers: {
       accept: "application/json, text/plain, */*",
       "content-type": "application/json;charset=UTF-8",

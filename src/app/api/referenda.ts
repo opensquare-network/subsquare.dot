@@ -3,9 +3,43 @@
  * Data source: https://polkadot-api.subsquare.io/gov2/referendums?simple=1
  * Field mapping follows polkadot-referenda's api.ts and the fields SubSquare consumes.
  */
+import { DOT } from "../lib/chain/assets";
 import { compact, startCase, timeAgo, toBigInt } from "../lib/format";
+import { SUBSQUARE_API_URL } from "./subsquare";
 
-export const API_BASE = "https://polkadot-api.subsquare.io";
+type BadgeTone = "azure" | "blue" | "green" | "orange" | "red" | "neutral";
+
+const STATUS_TONE_BY_NAME: Record<string, BadgeTone> = {
+  Submitted: "azure",
+  Preparing: "azure",
+  Queueing: "orange",
+  Deciding: "blue",
+  Ongoing: "blue",
+  Confirming: "green",
+  Confirmed: "green",
+  Approved: "green",
+  Executed: "green",
+  DecisionDepositPlaced: "green",
+  DecisionStarted: "green",
+  ConfirmStarted: "green",
+  Cancelled: "red",
+  Killed: "red",
+  Rejected: "red",
+  ConfirmAborted: "red",
+  TimedOut: "neutral",
+  Timeout: "neutral",
+};
+
+const STATUS_COLOR_BY_TONE: Record<BadgeTone, string> = {
+  azure: "#00b2ff",
+  blue: "#E6007A",
+  green: "#00d395",
+  orange: "#ff9500",
+  red: "#ff4444",
+  neutral: "#7a7a8a",
+};
+
+const TRACK_COLORS = ["#7b3fe4", "#E6007A", "#00b2ff", "#ff9500", "#00d395"];
 
 export interface ReferendumIndexer {
   blockHeight: number;
@@ -63,20 +97,12 @@ export interface FetchReferendumsParams {
   status?: string;
 }
 
-/** Filter tab → API status name mapping. Groups without a single status (e.g. Passed) are omitted and grouped on the client. */
-export const API_STATUS_BY_TAB: Record<string, string | undefined> = {
-  Deciding: "Deciding",
-  Confirming: "Confirming",
-  Queueing: "Queueing",
-  Rejected: "Rejected",
-};
-
 export async function fetchReferendums({
   page = 1,
   pageSize = 20,
   status,
 }: FetchReferendumsParams = {}): Promise<ReferendumsResponse> {
-  const url = new URL(`${API_BASE}/gov2/referendums`);
+  const url = new URL(`${SUBSQUARE_API_URL}/gov2/referendums`);
   url.searchParams.set("simple", "1");
   url.searchParams.set("page", String(page));
   // The API expects snake_case page_size (camelCase pageSize is ignored).
@@ -107,7 +133,7 @@ export interface OverviewSummary {
  * Source: https://polkadot-api.subsquare.io/overview/summary
  */
 export async function fetchOverviewSummary(): Promise<OverviewSummary> {
-  const res = await fetch(`${API_BASE}/overview/summary`);
+  const res = await fetch(`${SUBSQUARE_API_URL}/overview/summary`);
   if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
   return (await res.json()) as OverviewSummary;
 }
@@ -125,7 +151,7 @@ export interface TreasuryYearSummary {
  * Source: https://polkadot-api.subsquare.io/treasury/years
  */
 export async function fetchTreasuryYears(): Promise<TreasuryYearSummary[]> {
-  const res = await fetch(`${API_BASE}/treasury/years`);
+  const res = await fetch(`${SUBSQUARE_API_URL}/treasury/years`);
   if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
   return (await res.json()) as TreasuryYearSummary[];
 }
@@ -165,55 +191,21 @@ export function titleOf(item: ReferendumListItem): string {
   );
 }
 
-type BadgeTone = "azure" | "blue" | "green" | "orange" | "red" | "neutral";
-
-const TONE: Record<string, BadgeTone> = {
-  Submitted: "azure",
-  Preparing: "azure",
-  Queueing: "orange",
-  Deciding: "blue",
-  Ongoing: "blue",
-  Confirming: "green",
-  Confirmed: "green",
-  Approved: "green",
-  Executed: "green",
-  DecisionDepositPlaced: "green",
-  DecisionStarted: "green",
-  ConfirmStarted: "green",
-  Cancelled: "red",
-  Killed: "red",
-  Rejected: "red",
-  ConfirmAborted: "red",
-  TimedOut: "neutral",
-  Timeout: "neutral",
-};
-
-const TONE_COLOR: Record<BadgeTone, string> = {
-  azure: "#00b2ff",
-  blue: "#E6007A",
-  green: "#00d395",
-  orange: "#ff9500",
-  red: "#ff4444",
-  neutral: "#7a7a8a",
-};
-
 function toneForState(
   name: string,
   result?: { ok?: unknown; err?: unknown },
 ): BadgeTone {
   if (name === "Executed" && result && !("ok" in result)) return "red";
-  return TONE[name] ?? "neutral";
+  return STATUS_TONE_BY_NAME[name] ?? "neutral";
 }
 
 export function statusColorOf(item: ReferendumListItem): string {
   const state = stateOf(item);
-  return TONE_COLOR[toneForState(state.name, state.args?.result)];
+  return STATUS_COLOR_BY_TONE[toneForState(state.name, state.args?.result)];
 }
 
-const TRACK_PALETTE = ["#7b3fe4", "#E6007A", "#00b2ff", "#ff9500", "#00d395"];
-
 function trackColorOf(item: ReferendumListItem): string {
-  return TRACK_PALETTE[(item.track ?? 0) % TRACK_PALETTE.length]!;
+  return TRACK_COLORS[(item.track ?? 0) % TRACK_COLORS.length]!;
 }
 
 /** Row UI model (aligned with the fields ReferendaSection consumes). */
@@ -239,8 +231,8 @@ export interface ReferendaRow {
 export function toRow(item: ReferendumListItem): ReferendaRow {
   const state = stateOf(item);
   const tally = tallyOf(item);
-  const ayes = Number(toBigInt(tally?.ayes) / 10n ** 10n);
-  const nays = Number(toBigInt(tally?.nays) / 10n ** 10n);
+  const ayes = Number(toBigInt(tally?.ayes) / 10n ** BigInt(DOT.decimals));
+  const nays = Number(toBigInt(tally?.nays) / 10n ** BigInt(DOT.decimals));
   const total = ayes + nays;
   const ayePct = total > 0 ? Number(((ayes / total) * 100).toFixed(1)) : 0;
   const nayPct = total > 0 ? Number((100 - ayePct).toFixed(1)) : 0;

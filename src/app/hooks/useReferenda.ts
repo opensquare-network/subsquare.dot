@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import {
-  API_STATUS_BY_TAB,
-  fetchReferendums,
-  toRow,
-  type ReferendaRow,
-} from "../api/referenda";
+import { fetchReferendums, toRow, type ReferendaRow } from "../api/referenda";
 
 const PAGE_SIZE = 20;
+const API_STATUS_BY_TAB: Record<string, string | undefined> = {
+  Deciding: "Deciding",
+  Confirming: "Confirming",
+  Queueing: "Queueing",
+  Rejected: "Rejected",
+};
 
 interface UseReferendaResult {
   items: ReferendaRow[];
@@ -43,7 +44,11 @@ export function useReferenda(status: string): UseReferendaResult {
     setLoading(true);
     setError(null);
 
-    fetchReferendums({ page, pageSize: PAGE_SIZE, status: serverStatus })
+    fetchReferendums({
+      page,
+      pageSize: PAGE_SIZE,
+      status: serverStatus,
+    })
       .then((res) => {
         if (cancelled) return;
         setItems(res.items.map(toRow));

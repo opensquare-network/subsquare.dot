@@ -3,9 +3,7 @@
  * batch POST to the backend /avatars endpoint with a short debounce and cache.
  */
 
-import { API_BASE } from "../api/referenda";
-
-export const AVATAR_PREVIEW_ENDPOINT = "https://static.subsquare.io";
+import { SUBSQUARE_API_URL } from "../api/subsquare";
 
 type PendingRequest = {
   address: string;
@@ -24,7 +22,7 @@ function flush() {
   pending = [];
   const addresses = batch.map((req) => req.address);
 
-  fetch(new URL("avatars", `${API_BASE}/`), {
+  fetch(new URL("avatars", `${SUBSQUARE_API_URL}/`), {
     headers: {
       accept: "application/json, text/plain, */*",
       "content-type": "application/json;charset=UTF-8",
@@ -65,5 +63,5 @@ export function fetchAvatar(address: string): Promise<string | null> {
 
 /** Same rule as subsquare's storage link: preview endpoint + cid. */
 export function getStorageLink(avatarCid: string): string {
-  return `${AVATAR_PREVIEW_ENDPOINT}/${avatarCid}`;
+  return `https://static.subsquare.io/${avatarCid}`;
 }
