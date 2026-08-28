@@ -1,4 +1,5 @@
 import { Breadcrumb } from "./Breadcrumb";
+import { HostStatus } from "./HostStatus";
 import { useBreadcrumbs } from "./useBreadcrumbs";
 import { useHeaderActions } from "./HeaderActionsContext";
 
@@ -14,7 +15,10 @@ export function AppHeader() {
   return (
     <header className="flex h-14 items-center justify-between px-6 border-b border-border bg-card flex-shrink-0">
       <Breadcrumb items={crumbs} />
-      <div className="flex items-center gap-2">{actions}</div>
+      <div className="flex items-center gap-4">
+        <HostStatus />
+        <div className="flex items-center gap-2">{actions}</div>
+      </div>
     </header>
   );
 }
