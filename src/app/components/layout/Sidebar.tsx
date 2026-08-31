@@ -106,7 +106,7 @@ function ThemeToggle({
 
 /** Left navigation sidebar: brand, nav sections and footer toggles. */
 export function Sidebar() {
-  const { dark, toggle: toggleDark } = useTheme();
+  const theme = useTheme();
   const { activeReferenda } = useOverviewSummary();
   const [expandedSections, setExpandedSections] = useState<string[]>([
     "Governance",
@@ -136,7 +136,9 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <ThemeToggle dark={dark} onToggle={toggleDark} />
+      {theme.source === "standalone" && (
+        <ThemeToggle dark={theme.dark} onToggle={theme.toggle} />
+      )}
     </aside>
   );
 }

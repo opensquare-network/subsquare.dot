@@ -21,9 +21,12 @@ export const HOST_GENESIS: string =
 
 type HostWindow = Window & { __HOST_API_PORT__?: MessagePort };
 
+let hostPortPromise: Promise<MessagePort | null> | null = null;
+
 /**
  * Manually run the truapi-ready → truapi-init handshake and pin the host's
- * MessagePort to `window.__HOST_API_PORT__` before the SDK builds its client.
+ * MessagePort to `window.__HOST_API_PORT__` before the SDK opens a Host
+ * transport.
  *
  * Why handshake by hand: the SDK's iframe handshake is one-shot — a
  * `truapi-ready` posted before the host bundle is ready is silently dropped,
@@ -33,19 +36,23 @@ type HostWindow = Window & { __HOST_API_PORT__?: MessagePort };
  * `createIframeCompatibilityProvider` adopts the MessagePort channel directly
  * (`win.__HOST_API_PORT__` already present), bypassing that race entirely.
  */
-function ensureHostPort(): Promise<MessagePort | null> {
+export function ensureHostPort(): Promise<MessagePort | null> {
   const win = window as HostWindow;
   if (win.__HOST_API_PORT__) return Promise.resolve(win.__HOST_API_PORT__);
   if (window === window.top) return Promise.resolve(null);
+  if (hostPortPromise) return hostPortPromise;
 
-  return new Promise((resolve) => {
+  const pendingPort = new Promise<MessagePort | null>((resolve) => {
     let done = false;
+    const finish = (port: MessagePort | null) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      window.removeEventListener("message", onMessage);
+      resolve(port);
+    };
     const timer = setTimeout(() => {
-      if (!done) {
-        done = true;
-        window.removeEventListener("message", onMessage);
-        resolve(null);
-      }
+      finish(null);
     }, 5000);
 
     function onMessage(event: MessageEvent) {
@@ -55,16 +62,21 @@ function ensureHostPort(): Promise<MessagePort | null> {
       if (data?.type !== "truapi-init") return;
       const port = (event.ports ?? [])[0];
       if (!port) return;
-      done = true;
-      clearTimeout(timer);
-      window.removeEventListener("message", onMessage);
       win.__HOST_API_PORT__ = port;
-      resolve(port);
+      finish(port);
     }
 
     window.addEventListener("message", onMessage);
     window.parent.postMessage({ type: "truapi-ready" }, "*");
   });
+
+  hostPortPromise = pendingPort;
+  void pendingPort.then((port) => {
+    if (port === null && hostPortPromise === pendingPort) {
+      hostPortPromise = null;
+    }
+  });
+  return pendingPort;
 }
 
 let clientPromise: Promise<PolkadotClient | null> | null = null;

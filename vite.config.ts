@@ -119,6 +119,13 @@ export default defineConfig({
 <iframe id="product-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
 <script>window.__TEST_HOST_CONFIG__ = ${config};</script>
 <script>${HOST_BUNDLE}</script>
+<script>
+window.setInterval(() => {
+  const host = window.__TEST_HOST__;
+  if (!host) return;
+  host.setTheme(host.getTheme().variant === "Dark" ? "light" : "dark");
+}, 10_000);
+</script>
 </body></html>`);
         });
       },

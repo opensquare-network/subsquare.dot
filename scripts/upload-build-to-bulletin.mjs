@@ -55,7 +55,7 @@ function printUsage(exitCode = 0) {
 Uploads the files under dist/ to Bulletin devnet and stores a CID manifest.
 
 Required environment:
-  BULLETIN_UPLOAD_ACCOUNT_FILE='<password-protected account JSON export>'
+  ACCOUNT_FILE='<password-protected account JSON export>'
 
 Optional environment:
   BULLETIN_RPC='${DEFAULT_BULLETIN_RPC}'
@@ -139,7 +139,7 @@ async function loadExportedAccount(path) {
 
   const account = canonicalAddress(
     accountJson.address,
-    "BULLETIN_UPLOAD_ACCOUNT_FILE address",
+    "ACCOUNT_FILE address",
   );
   const keyring = new Keyring({ type: "sr25519", ss58Format: 42 });
   let keyPair;
@@ -173,7 +173,7 @@ async function loadExportedAccount(path) {
 async function promptForAccountPassword() {
   if (!process.stdin.isTTY || !process.stdout.isTTY) {
     throw new Error(
-      "An interactive terminal is required to unlock BULLETIN_UPLOAD_ACCOUNT_FILE",
+      "An interactive terminal is required to unlock ACCOUNT_FILE",
     );
   }
 
@@ -514,7 +514,7 @@ function stateArtifact(artifact, receipt) {
 
 async function main() {
   const { force, submit } = parseArguments(process.argv.slice(2));
-  const accountFile = resolveEnvironmentPath("BULLETIN_UPLOAD_ACCOUNT_FILE");
+  const accountFile = resolveEnvironmentPath("ACCOUNT_FILE");
   const rpc = process.env.BULLETIN_RPC ?? DEFAULT_BULLETIN_RPC;
   const buildDirectory = resolve(
     REPOSITORY_ROOT,

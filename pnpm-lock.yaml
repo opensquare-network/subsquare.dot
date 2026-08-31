@@ -9,6 +9,8 @@ overrides:
   '@novasamatech/host-api': 0.9.3
   '@novasamatech/host-api-wrapper': 0.9.3
 
+packageExtensionsChecksum: sha256-TJ21dgukADXXNbFYzkFFwRBe3SX3Mpcpib/E0/Y/S7k=
+
 importers:
 
   .:
@@ -2910,7 +2912,9 @@ snapshots:
 
   '@polkadot-api/json-rpc-provider-proxy@0.2.7': {}
 
-  '@polkadot-api/json-rpc-provider-proxy@0.4.0': {}
+  '@polkadot-api/json-rpc-provider-proxy@0.4.0':
+    dependencies:
+      '@polkadot-api/json-rpc-provider': 0.2.0
 
   '@polkadot-api/json-rpc-provider@0.0.4': {}
 

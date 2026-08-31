@@ -64,7 +64,7 @@ function printUsage(exitCode = 0) {
 Sets an IPFS CID as the contenthash for a DotNS .dot domain on PCF Devnet Asset Hub.
 
 Required environment:
-  BULLETIN_UPLOAD_ACCOUNT_FILE='<password-protected Polkadot.js account JSON export>'
+  ACCOUNT_FILE='<password-protected Polkadot.js account JSON export>'
 
 Optional environment:
   DOTNS_ASSET_HUB_RPC='${DEFAULT_ASSET_HUB_RPC}'
@@ -145,7 +145,7 @@ async function loadExportedAccount(path) {
 
   const account = canonicalAddress(
     accountJson.address,
-    "BULLETIN_UPLOAD_ACCOUNT_FILE address",
+    "ACCOUNT_FILE address",
   );
   const keyring = new Keyring({ type: "sr25519", ss58Format: 42 });
   let keyPair;
@@ -179,7 +179,7 @@ async function loadExportedAccount(path) {
 async function promptForAccountPassword() {
   if (!process.stdin.isTTY || !process.stdout.isTTY) {
     throw new Error(
-      "An interactive terminal is required to unlock BULLETIN_UPLOAD_ACCOUNT_FILE",
+      "An interactive terminal is required to unlock ACCOUNT_FILE",
     );
   }
 
@@ -504,7 +504,7 @@ async function main() {
   const { canonicalCid, contenthash } = encodeCidToContenthash(cid);
   const accountFile = resolve(
     REPOSITORY_ROOT,
-    requireEnvironment("BULLETIN_UPLOAD_ACCOUNT_FILE"),
+    requireEnvironment("ACCOUNT_FILE"),
   );
   const rpc = process.env.DOTNS_ASSET_HUB_RPC ?? DEFAULT_ASSET_HUB_RPC;
 

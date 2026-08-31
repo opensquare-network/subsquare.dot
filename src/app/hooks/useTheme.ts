@@ -1,26 +1,13 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 
-const STORAGE_KEY = "subsquare-theme";
+export type ThemeState =
+  | { source: "host" }
+  | { source: "standalone"; dark: boolean; toggle: () => void };
 
-/** Returns the saved preference, falling back to the system color scheme. */
-function getInitialDark(): boolean {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === "dark") return true;
-  if (stored === "light") return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
+export const ThemeContext = createContext<ThemeState | null>(null);
 
-/**
- * Theme hook: persists the dark/light choice to localStorage and applies
- * it to the <html> element. Falls back to the OS preference on first visit.
- */
-export function useTheme() {
-  const [dark, setDark] = useState<boolean>(getInitialDark);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    localStorage.setItem(STORAGE_KEY, dark ? "dark" : "light");
-  }, [dark]);
-
-  return { dark, toggle: () => setDark((d) => !d) };
+export function useTheme(): ThemeState {
+  const theme = useContext(ThemeContext);
+  if (!theme) throw new Error("useTheme must be used within ThemeProvider");
+  return theme;
 }

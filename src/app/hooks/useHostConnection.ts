@@ -1,47 +1,12 @@
-import { useEffect, useState } from "react";
-import { getHostClient } from "../lib/host";
+import { isInsideContainerSync } from "@parity/product-sdk/host";
 
-export type HostConnectionStatus =
-  | { state: "checking" }
-  | { state: "outside" }
-  | { state: "connected"; chainName: string }
-  | { state: "error"; message: string };
+export type HostConnectionStatus = { state: "host" } | { state: "outside" };
 
 /**
- * Detect whether we run inside a Host container and, when we do, open the chain
- * connection and read the chain name. Feeds the top-bar Host status indicator;
- * the app itself keeps working without a host.
+ * Detect whether we run inside a Host container for the top-bar status
+ * indicator. This deliberately avoids opening a chain connection: the app does
+ * not need one merely to distinguish Host from standalone mode.
  */
 export function useHostConnection(): HostConnectionStatus {
-  const [status, setStatus] = useState<HostConnectionStatus>({
-    state: "checking",
-  });
-
-  useEffect(() => {
-    let cancelled = false;
-
-    getHostClient()
-      .then(async (client) => {
-        if (cancelled) return;
-        if (!client) {
-          setStatus({ state: "outside" });
-          return;
-        }
-        const spec = await client.getChainSpecData();
-        if (!cancelled) setStatus({ state: "connected", chainName: spec.name });
-      })
-      .catch((err: unknown) => {
-        if (cancelled) return;
-        setStatus({
-          state: "error",
-          message: err instanceof Error ? err.message : String(err),
-        });
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return status;
+  return { state: isInsideContainerSync() ? "host" : "outside" };
 }
