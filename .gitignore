@@ -8,6 +8,12 @@ dist
 dist-ssr
 *.tsbuildinfo
 
+# Local Bulletin upload checkpoints
+.bulletin/
+
+# Local DotNS purchase commitments
+.dotns/
+
 # Logs
 logs
 *.log

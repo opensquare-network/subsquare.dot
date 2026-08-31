@@ -125,6 +125,7 @@ export default defineConfig({
     },
   ],
   resolve: {
+    dedupe: ["@polkadot-api/json-rpc-provider"],
     alias: {
       // Alias @ to the src directory
       "@": path.resolve(__dirname, "./src"),
