@@ -23,6 +23,9 @@ export function StatCard({
   valueClass = "text-lg",
   loading = false,
 }: StatCardProps) {
+  const fadedColor = `color-mix(in srgb, ${color} 8%, transparent)`;
+  const hairlineColor = `color-mix(in srgb, ${color} 38%, transparent)`;
+
   return (
     // No overflow-hidden here: the sub tooltip floats above the card, and the
     // colored top hairline stays within bounds on its own.
@@ -30,7 +33,7 @@ export function StatCard({
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
-          background: `linear-gradient(90deg, ${color}60, transparent)`,
+          background: `linear-gradient(90deg, ${hairlineColor}, transparent)`,
         }}
       />
       <div className="flex items-start justify-between">
@@ -61,7 +64,7 @@ export function StatCard({
         {icon && (
           <div
             className="p-2 rounded"
-            style={{ background: `${color}15`, color }}
+            style={{ background: fadedColor, color }}
           >
             {icon}
           </div>

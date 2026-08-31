@@ -44,7 +44,7 @@ export function StatsGrid() {
       value: unavailable ? "—" : String(activeReferenda),
       sub: unavailable ? "" : `of ${totalReferenda} total`,
       icon: <Vote size={16} />,
-      color: "var(--primary)",
+      color: "var(--secondary-foreground)",
     },
     {
       label: "Treasury Balance",
