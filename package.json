@@ -1,5 +1,5 @@
 {
-  "name": "polkadot-subsquare",
+  "name": "subsquare.dot",
   "private": true,
   "version": "0.1.0",
   "description": "Polkadot Subsquare is a platform for exploring Polkadot OpenGov referenda, allowing users to track proposals, votes, and outcomes.",
