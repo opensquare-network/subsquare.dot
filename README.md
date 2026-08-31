@@ -42,16 +42,18 @@ the uploader targets Bulletin devnet.
 
 ### 1. Configure the account file
 
-Export the publishing account from Polkadot.js as a password-protected sr25519
-JSON file. Keep it outside Git, then configure its path in the ignored `.env`
-file. Relative paths are resolved from the repository root.
+Export the shared publishing account from Polkadot.js as a password-protected
+sr25519 JSON file. `upload:bulletin`, `purchase:dotns`, and
+`contenthash:dotns` all use this account. Keep it outside Git, then configure
+its path in the ignored `.env` file. Relative paths are resolved from the
+repository root.
 
 ```bash
 cp .env.example .env
 ```
 
 ```dotenv
-ACCOUNT_FILE=.bulletin/account.json
+ACCOUNT_FILE=.your/account.json
 ```
 
 The account must have enough PAS for the DotNS registration and be eligible for

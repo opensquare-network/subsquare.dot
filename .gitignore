@@ -11,6 +11,9 @@ dist-ssr
 # Local Bulletin upload checkpoints
 .bulletin/
 
+# Local account JSON exports
+.your/
+
 # Local DotNS purchase commitments
 .dotns/
 
