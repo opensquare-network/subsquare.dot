@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
+import LogoSubsquare from "@osn/icons/opensquare/LogoSubsquare";
 import { ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import { navSections } from "../../data";
 import { useTheme } from "../../hooks/useTheme";
-import { DOT_PINK } from "../../theme";
 import { useOverviewSummary } from "./OverviewSummaryContext";
 
 /** Maps a sidebar nav item to its route. */
@@ -17,12 +17,7 @@ type NavSectionData = (typeof navSections)[number];
 function Brand() {
   return (
     <div className="flex items-center gap-2.5 px-4 py-4 border-b border-border">
-      <div
-        className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-        style={{ background: DOT_PINK }}
-      >
-        <div className="w-2.5 h-2.5 rounded-full bg-white" />
-      </div>
+      <LogoSubsquare className="w-7 h-7 flex-shrink-0" aria-hidden="true" />
       <div>
         <div className="font-['Unbounded'] text-xs font-bold tracking-tight leading-none text-foreground">
           SUBSQUARE
@@ -70,7 +65,7 @@ function NavSection({
                 to={itemRoutes[item] ?? "/"}
                 className="w-full flex items-center justify-between gap-2 px-2 py-1 rounded text-xs transition-colors text-muted-foreground hover:text-foreground"
                 style={({ isActive }) =>
-                  isActive ? { color: DOT_PINK } : undefined
+                  isActive ? { color: "var(--primary)" } : undefined
                 }
               >
                 <span>{item}</span>

@@ -32,14 +32,20 @@ const STATUS_TONE_BY_NAME: Record<string, BadgeTone> = {
 
 const STATUS_COLOR_BY_TONE: Record<BadgeTone, string> = {
   azure: "#00b2ff",
-  blue: "#E6007A",
+  blue: "var(--primary)",
   green: "#00d395",
   orange: "#ff9500",
   red: "#ff4444",
   neutral: "#7a7a8a",
 };
 
-const TRACK_COLORS = ["#7b3fe4", "#E6007A", "#00b2ff", "#ff9500", "#00d395"];
+const TRACK_COLORS = [
+  "#7b3fe4",
+  "var(--primary)",
+  "#00b2ff",
+  "#ff9500",
+  "#00d395",
+];
 
 export interface ReferendumIndexer {
   blockHeight: number;

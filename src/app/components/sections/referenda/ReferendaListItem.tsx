@@ -1,6 +1,5 @@
 import { ChevronRight, Clock, MessageSquare } from "lucide-react";
 import { type ReferendaRow } from "../../../api/referenda";
-import { DOT_PINK } from "../../../theme";
 import { StatusBadge, TrackBadge, VoteBar } from "../../gov";
 import AddressUser from "../../user/AddressUser";
 import { REFERENDA_GRID_COLUMNS } from "./columns";
@@ -32,7 +31,7 @@ function ReferendaTitle({
         className="text-[12px] font-medium leading-snug mb-1.5 transition-colors"
         style={{ color: "var(--foreground)" }}
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.color = DOT_PINK;
+          (e.currentTarget as HTMLElement).style.color = "var(--primary)";
         }}
         onMouseLeave={(e) => {
           (e.currentTarget as HTMLElement).style.color = "var(--foreground)";

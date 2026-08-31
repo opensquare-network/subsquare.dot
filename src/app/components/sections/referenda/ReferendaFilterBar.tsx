@@ -21,7 +21,7 @@ export function ReferendaFilterBar({
           className={cn(
             "px-3 py-1 rounded-full text-[11px] font-mono transition-colors cursor-pointer",
             activeFilter === f
-              ? "bg-[#E6007A18] border border-[#E6007A50] text-[#E6007A]"
+              ? "bg-primary/10 border border-primary/30 text-primary"
               : "bg-muted border border-border text-muted-foreground hover:text-foreground hover:border-foreground/40",
           )}
         >

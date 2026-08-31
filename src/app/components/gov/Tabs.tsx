@@ -20,7 +20,7 @@ export function Tabs<T extends string>({
   tabs,
   active,
   onChange,
-  color = "#E6007A",
+  color = "var(--primary)",
   right,
 }: TabsProps<T>) {
   return (

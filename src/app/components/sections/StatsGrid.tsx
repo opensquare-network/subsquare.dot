@@ -2,7 +2,6 @@ import { Info, Landmark, ReceiptText, Vote } from "lucide-react";
 import { useTreasuryBalance } from "../../hooks/useTreasuryBalance";
 import { useTreasuryYears } from "../../hooks/useTreasuryYears";
 import { compact } from "../../lib/format";
-import { DOT_PINK } from "../../theme";
 import { StatCard } from "../gov";
 import { useOverviewSummary } from "../layout/OverviewSummaryContext";
 import { Tooltip } from "../user";
@@ -45,7 +44,7 @@ export function StatsGrid() {
       value: unavailable ? "—" : String(activeReferenda),
       sub: unavailable ? "" : `of ${totalReferenda} total`,
       icon: <Vote size={16} />,
-      color: DOT_PINK,
+      color: "var(--primary)",
     },
     {
       label: "Treasury Balance",
