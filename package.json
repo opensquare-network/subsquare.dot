@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "pnpm@10.14.0",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
@@ -47,9 +47,16 @@
     "tailwindcss": "4.1.12",
     "vite": "6.3.5"
   },
-  "resolutions": {
-    "polkadot-api": "2.1.4",
-    "@novasamatech/host-api": "0.9.3",
-    "@novasamatech/host-api-wrapper": "0.9.3"
+  "pnpm": {
+    "overrides": {
+      "polkadot-api": "2.1.4",
+      "@novasamatech/host-api": "0.9.3",
+      "@novasamatech/host-api-wrapper": "0.9.3"
+    },
+    "onlyBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "core-js",
+      "esbuild"
+    ]
   }
 }

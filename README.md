@@ -4,9 +4,9 @@ This is a code bundle for Redesign Polkadot Subsquare. The original project is a
 
 ## Running the code
 
-Run `yarn install` to install the dependencies.
+Run `pnpm install` to install the dependencies.
 
-Run `yarn dev` to start the development server.
+Run `pnpm dev` to start the development server.
 
 ## Running inside the mock Host
 
@@ -18,8 +18,8 @@ status indicator shows the connected chain name (or "Standalone" outside a
 container).
 
 ```bash
-yarn dev:polkadot    # default Polkadot mainnet Asset Hub
-# or yarn dev:devnet (new Paseo) / dev:paseo / dev:previewnet
+pnpm dev:polkadot    # default Polkadot mainnet Asset Hub
+# or pnpm dev:devnet (new Paseo) / dev:paseo / dev:previewnet
 # open http://localhost:5173/__test_host in a browser
 ```
 
