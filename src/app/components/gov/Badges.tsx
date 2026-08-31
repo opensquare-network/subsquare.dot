@@ -6,13 +6,16 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, color }: StatusBadgeProps) {
+  const background = `color-mix(in srgb, ${color} 9%, transparent)`;
+  const borderColor = `color-mix(in srgb, ${color} 19%, transparent)`;
+
   return (
     <span
       className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-medium uppercase tracking-widest rounded-sm"
       style={{
         color,
-        background: `${color}18`,
-        border: `1px solid ${color}30`,
+        background,
+        border: `1px solid ${borderColor}`,
       }}
     >
       {status === "Deciding" && <Clock size={9} />}
@@ -31,13 +34,16 @@ interface TrackBadgeProps {
 }
 
 export function TrackBadge({ track, color }: TrackBadgeProps) {
+  const background = `color-mix(in srgb, ${color} 9%, transparent)`;
+  const borderColor = `color-mix(in srgb, ${color} 19%, transparent)`;
+
   return (
     <span
       className="inline-flex items-center text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded-sm"
       style={{
         color,
-        background: `${color}18`,
-        border: `1px solid ${color}30`,
+        background,
+        border: `1px solid ${borderColor}`,
       }}
     >
       {track}
